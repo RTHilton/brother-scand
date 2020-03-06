@@ -23,6 +23,7 @@
 #define DEVICE_REGISTER_DURATION_SEC 360
 #define DEVICE_KEEPALIVE_DURATION_SEC 5
 #define BUTTON_HANDLER_PORT 54925
+#define DEVICE_SUCCESS_STATUS
 
 struct device {
     in_addr_t ip;
@@ -175,7 +176,7 @@ device_handler_add_device(struct device_config *config)
                                      g_buf, sizeof(g_buf),
                                      inet_addr(config->ip));
 
-    if (status != 10001) {
+    if (status != DEVICE_SUCCESS_STATUS) {
         LOG_ERR("Error: device at %s is unreachable - status: %i.\n", config->ip, status);
         //free(dev);
         return NULL;
@@ -218,13 +219,13 @@ device_handler_loop(void *arg)
             dev->status = snmp_get_printer_status(g_dev_handler.button_conn,
                                                   g_buf, sizeof(g_buf),
                                                   dev->ip);
-            if (dev->status != 10001) {
+            if (dev->status != DEVICE_SUCCESS_STATUS) {
                 LOG_WARN("Warn: device at %s is currently unreachable.\n",
                          dev->config->ip);
             }
         }
 
-        if (dev->status != 10001) {
+        if (dev->status != DEVICE_SUCCESS_STATUS) {
             continue;
         }
 
