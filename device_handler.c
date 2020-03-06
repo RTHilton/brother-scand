@@ -193,7 +193,7 @@ device_handler_add_device(struct device_config *config)
     dev->channel = data_channel_create(config);
     if (dev->channel == NULL) {
         LOG_ERR("Failed to create data_channel for device %s.\n", config->ip);
-        free(dev);
+        //free(dev);
         return NULL;
     }
 
